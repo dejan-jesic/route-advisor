@@ -1,0 +1,16 @@
+route-advisor:
+  countries:
+    repository-url: https://raw.githubusercontent.com/mledoze/countries/master/countries.json
+    exact-number: 250
+
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+    driverClassName: org.postgresql.Driver
+  flyway:
+    clean-on-validation-error: true

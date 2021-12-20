@@ -1,0 +1,12 @@
+route-advisor:
+  countries:
+    repository-url: https://raw.githubusercontent.com/mledoze/countries/master/countries.json
+    exact-number: 250
+
+spring:
+  jpa:
+    database: POSTGRESQL
+  datasource:
+    url: jdbc:tc:postgresql:11.1:///test-db
+    username: postgres
+    password: postgres
