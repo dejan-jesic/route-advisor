@@ -54,7 +54,7 @@ public class Country {
     private Set<Country> fastestRoute = new LinkedHashSet<>();
 
     public Country(CountryDTO countryDTO) {
-        this.name = countryDTO.getName().getOfficial();
+        this.name = countryDTO.getName().getCommon();
         this.code = countryDTO.getCca3();
     }
 

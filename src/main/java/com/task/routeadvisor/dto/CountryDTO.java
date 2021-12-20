@@ -26,7 +26,7 @@ public class CountryDTO {
     @AllArgsConstructor
     public static class CountryNameDTO {
 
-        private String official;
+        private String common;
 
     }
 
