@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Map;
 
 @Slf4j
@@ -32,6 +33,16 @@ public class GlobalControllerAdvice {
             "message", exception.getReason()
         );
         return new ResponseEntity<>(responseBody, exception.getStatus());
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Map<String, Object>> constraintException(final ConstraintViolationException exception) {
+        final Map<String, Object> responseBody = Map.of(
+            "status", HttpStatus.BAD_REQUEST.name(),
+            "code", HttpStatus.BAD_REQUEST.value(),
+            "message", exception.getMessage()
+        );
+        return new ResponseEntity<>(responseBody, HttpStatus.BAD_REQUEST);
     }
 
 }

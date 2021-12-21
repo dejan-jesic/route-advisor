@@ -30,7 +30,7 @@ class RouteControllerTest {
 
     @Test
     void shouldMapRequestAndParametersProperly() throws Exception {
-        mockMvc.perform(get("/api/routing")
+        mockMvc.perform(get("/api/v1/routing")
                 .accept(APPLICATION_JSON)
                 .param("origin", "ESP")
                 .param("destination", "CZE"))
@@ -43,7 +43,7 @@ class RouteControllerTest {
 
     @Test
     void shouldReturn400SinceParameterIsMissing() throws Exception {
-        mockMvc.perform(get("/api/routing")
+        mockMvc.perform(get("/api/v1/routing")
                 .accept(APPLICATION_JSON)
                 .param("destination", "CZE"))
             .andDo(MockMvcResultHandlers.print())
@@ -55,7 +55,7 @@ class RouteControllerTest {
 
     @Test
     void shouldReturn404SinceRouteDoesNotExist() throws Exception {
-        mockMvc.perform(get("/api/invalid")
+        mockMvc.perform(get("/api/v2/routing")
                 .accept(APPLICATION_JSON)
                 .param("origin", "ESP")
                 .param("destination", "CZE"))

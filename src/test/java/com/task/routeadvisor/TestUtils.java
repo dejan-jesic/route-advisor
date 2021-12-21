@@ -4,6 +4,7 @@ import com.task.routeadvisor.entity.Country;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public interface TestUtils {
 
@@ -12,9 +13,9 @@ public interface TestUtils {
         for (int i = 0; i < numberOfCountries; i++) {
             countries.add(
                 Country.builder()
-                    .id((long) (i + 1))
-                    .code("" + (i + 1))
-                    .name("Name")
+                    .id(UUID.randomUUID())
+                    .code("Code " + (i + 1))
+                    .name("Name " + (i + 1))
                     .build());
         }
         return countries;

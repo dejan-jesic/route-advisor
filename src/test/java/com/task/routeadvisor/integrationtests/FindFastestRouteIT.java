@@ -31,7 +31,7 @@ public class FindFastestRouteIT {
 
     @BeforeAll
     public void setup() {
-        ROOT_URL = "http://localhost:" + localPort + "/api";
+        ROOT_URL = "http://localhost:" + localPort + "/api/v1";
     }
 
     @Test

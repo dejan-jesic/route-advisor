@@ -16,13 +16,13 @@ import javax.annotation.PostConstruct;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
-import static org.springframework.util.ObjectUtils.isEmpty;
+import static java.util.Objects.nonNull;
+import static org.springframework.util.StringUtils.hasText;
 
 @Slf4j
 @Configuration
@@ -41,18 +41,16 @@ public class RouteInitializer {
 
     @PostConstruct
     public void initializeCountries() throws Exception {
-        if (dbAlreadyPopulated()) {
+        if (dbIsAlreadyPopulated()) {
             return;
         }
 
         final Set<CountryDTO> countries = fetchCountriesFromAPI();
 
-        filterOutInvalidCountries(countries);
-
         persistCountriesToDB(countries);
     }
 
-    private boolean dbAlreadyPopulated() {
+    private boolean dbIsAlreadyPopulated() {
         if (countryRepository.findAll().size() == numberOfCountries) {
             log.info("DB already populated.");
             return true;
@@ -68,6 +66,7 @@ public class RouteInitializer {
         final CountryDTO[] fetchedCountries = objectMapper.readValue(countriesResponseAsJson.getBody(), CountryDTO[].class);
 
         final Set<CountryDTO> countries = Arrays.stream(fetchedCountries)
+            .filter(this::filterOutInvalidCountry)
             .collect(Collectors.toSet());
 
         if (didNotFetchExpectedCountries(countries)) {
@@ -75,6 +74,12 @@ public class RouteInitializer {
             throw new IllegalStateException();
         }
         return countries;
+    }
+
+    private boolean filterOutInvalidCountry(final CountryDTO countryDTO) {
+        return nonNull(countryDTO.getName())
+            && hasText(countryDTO.getName().getCommon())
+            && hasText(countryDTO.getCca3());
     }
 
     private void persistCountriesToDB(final Set<CountryDTO> countriesDTOs) {
@@ -100,18 +105,6 @@ public class RouteInitializer {
 
     private boolean didNotFetchExpectedCountries(final Collection<CountryDTO> countries) {
         return isNull(countries) || countries.size() != numberOfCountries;
-    }
-
-    private void filterOutInvalidCountries(final Set<CountryDTO> countries) {
-        final Set<CountryDTO> invalidCountries = new HashSet<>();
-
-        countries.forEach(country -> {
-            if (isEmpty(country.getName()) || isEmpty(country.getCca3())) {
-                invalidCountries.add(country);
-            }
-        });
-
-        countries.removeAll(invalidCountries);
     }
 
 }

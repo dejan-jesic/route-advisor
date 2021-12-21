@@ -10,17 +10,20 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.Pattern;
 import java.util.HashMap;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Tag(name = "Fastest route API")
+@Validated
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -61,9 +64,11 @@ public class RouteController {
                 schema = @Schema(implementation = HashMap.class)
             ))
     })
-    @GetMapping(value = "/routing", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/v1/routing", produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public RouteDTO findRoute(@RequestParam final String origin, @RequestParam final String destination) {
+    public RouteDTO findRoute(
+            @RequestParam @Pattern(regexp = "^[A-Z]{3}$") final String origin,
+            @RequestParam @Pattern(regexp = "^[A-Z]{3}$") final String destination) {
         return fastestRouteUseCase.findFastestRoute(origin, destination);
     }
 
