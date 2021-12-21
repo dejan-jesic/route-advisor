@@ -68,9 +68,19 @@ public class FindFastestRouteIT {
     }
 
     @Test
+    void shouldThrow400ErrorSinceCountryCodeIsNotValid() {
+        var statusCode = restTemplate
+            .getForEntity(ROOT_URL + "/routing?origin=ESP&destination=invalid_country_code", Map.class)
+            .getStatusCode();
+
+        assertThat(statusCode).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+
+    @Test
     void shouldThrow404ErrorSinceProvidedCountryDoesNotExist() {
         var statusCode = restTemplate
-            .getForEntity(ROOT_URL + "/routing?origin=ESP&destination=INVALID", Map.class)
+            .getForEntity(ROOT_URL + "/routing?origin=ESP&destination=PPP", Map.class)
             .getStatusCode();
 
         assertThat(statusCode).isEqualTo(HttpStatus.NOT_FOUND);

@@ -8,7 +8,7 @@ DESTINATION=${DESTINATION:=ESP}
 
 echo "Calculating fastest route from $ORIGIN to $DESTINATION..."
 
-URL="http://localhost:8080/api/routing?origin=$ORIGIN&destination=$DESTINATION"
+URL="http://localhost:8080/api/v1/routing?origin=$ORIGIN&destination=$DESTINATION"
 
 RESPONSE=$(curl -X GET -w "%{stderr}" -s -o - "$URL" 2>&1)
 
